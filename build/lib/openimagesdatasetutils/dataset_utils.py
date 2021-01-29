@@ -248,9 +248,9 @@ class DatasetConverter:
         x_test = self.image_index[len(x_train) + len(x_val):]
 
         
-        create_group(path_to_store, 'train', x_train)
-        create_group(path_to_store, 'validation', x_val)
-        create_group(path_to_store, 'test', x_test)
+        self.create_group(path_to_store, 'train', x_train)
+        self.create_group(path_to_store, 'validation', x_val)
+        self.create_group(path_to_store, 'test', x_test)
 
         df1 = self.get_dataset_stadistics(x_train, 'train')
         df2 = self.get_dataset_stadistics(x_val, 'validation')
