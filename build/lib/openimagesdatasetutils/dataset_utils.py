@@ -110,7 +110,6 @@ def create_labes(label_basepath, categories):
             msg.item.append(StringIntLabelMapItem(id=category['id'], name=category['name']))
 
     txt = str(text_format.MessageToBytes(msg, as_utf8=True), 'utf-8')
-    print(txt)
     with open(path_pbtxt, 'w') as f:
             f.write(txt)
             
