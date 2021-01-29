@@ -136,7 +136,7 @@ class DatasetConverter:
                 ymaxs = []
                 cats = []
                 for _tuple in anot_list:
-                    category = self.label_to_category(self.category_index, _tuple[0])                
+                    category = self.label_to_category(_tuple[0])                
                     
                     if (category != None):                
                         xmins.append(_tuple[1][0] )
@@ -168,7 +168,7 @@ class DatasetConverter:
             
             for member in root.findall('object'):
                 label = member[0].text
-                category = self.label_to_category(self.category_index, label)
+                category = self.label_to_category(label)
                 if (category != None): 
                     bndbox = member.findall("bndbox")[0]
                     xmins.append(int(bndbox.findall('xmin')[0].text) )
