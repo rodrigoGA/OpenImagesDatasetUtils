@@ -33,6 +33,7 @@ def create_category_index(categories):
             category_index[category['name']] = category
             for other_name in category['other_names']:
                 category_index[other_name] = category
+    return category_index
 
 
 def label_to_category(category_index, row_label):
