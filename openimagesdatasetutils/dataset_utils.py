@@ -151,37 +151,37 @@ class DatasetConverter:
                     self.image_index.append(element)
 
        
-    
-    
-def load_pascalVOC(self, labels_path, images_path, dataset_name = None):
-    for xml_file in glob.glob(labels_path + '/*.xml'):
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
-        filename = root.find('filename').text
         
-        image_path =  os.path.join(images_path, filename)
         
-        xmins = []
-        xmaxs = []
-        ymins = []
-        ymaxs = []
-        cats = []
-        
-        for member in root.findall('object'):
-            label = member[0].text
-            category = self.label_to_category(self.category_index, label)
-            if (category != None): 
-                bndbox = member.findall("bndbox")[0]
-                xmins.append(int(bndbox.findall('xmin')[0].text) )
-                ymins.append(int(bndbox.findall('ymin')[0].text) )
-                xmaxs.append(int(bndbox.findall('xmax')[0].text) )
-                ymaxs.append(int(bndbox.findall('ymax')[0].text ) )
-                cats.append(category)
-                
-                
-        if (len(cats) > 0):
-            element=self.get_image( image_path, xmins, xmaxs, ymins, ymaxs, cats, dataset_name)
-            self.image_index.append(element)               
+    def load_pascalVOC(self, labels_path, images_path, dataset_name = None):
+        for xml_file in glob.glob(labels_path + '/*.xml'):
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+            filename = root.find('filename').text
+            
+            image_path =  os.path.join(images_path, filename)
+            
+            xmins = []
+            xmaxs = []
+            ymins = []
+            ymaxs = []
+            cats = []
+            
+            for member in root.findall('object'):
+                label = member[0].text
+                category = self.label_to_category(self.category_index, label)
+                if (category != None): 
+                    bndbox = member.findall("bndbox")[0]
+                    xmins.append(int(bndbox.findall('xmin')[0].text) )
+                    ymins.append(int(bndbox.findall('ymin')[0].text) )
+                    xmaxs.append(int(bndbox.findall('xmax')[0].text) )
+                    ymaxs.append(int(bndbox.findall('ymax')[0].text ) )
+                    cats.append(category)
+                    
+                    
+            if (len(cats) > 0):
+                element=self.get_image( image_path, xmins, xmaxs, ymins, ymaxs, cats, dataset_name)
+                self.image_index.append(element)               
 
 
 
