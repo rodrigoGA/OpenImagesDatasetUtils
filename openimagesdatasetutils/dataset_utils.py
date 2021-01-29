@@ -22,7 +22,6 @@ import pandas as pd
 
 
 def create_category_index(categories):
-    print('1')
     category_index={}
     num_categories = 0
     #se crea un indice de categorias con id y nombre
