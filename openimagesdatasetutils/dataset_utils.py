@@ -29,7 +29,7 @@ class DatasetConverter:
         self.init_category_index(categories)
 
 
-    def init_category_index(categories):
+    def init_category_index(self, categories):
         self.categories=categories
         self.category_index={}
         num_categories = 0
@@ -44,7 +44,7 @@ class DatasetConverter:
                     self.category_index[other_name] = category
 
 
-    def label_to_category(row_label):
+    def label_to_category(self, row_label):
         try:
             return self.category_index[row_label]
         except:
@@ -54,6 +54,7 @@ class DatasetConverter:
 
 
     def get_image(
+            self,
             image_path,
             xmins = [],
             xmaxs = [],
@@ -77,7 +78,7 @@ class DatasetConverter:
     
 
     
-    def get_dataset_stadistics(images, datasettype):
+    def get_dataset_stadistics(self, images, datasettype):
         df = pd.DataFrame(data = {'image': [image['uuid'] for image in images]})
         for categoy in self.categories:
             df[categoy['name']] = [0 for x in images]
@@ -94,7 +95,7 @@ class DatasetConverter:
         
     
 
-    def create_labelmap_pbtxt(path):
+    def create_labelmap_pbtxt(self, path):
         msg = StringIntLabelMap()
         for category in self.categories:
             if category['enabled']:
@@ -106,7 +107,7 @@ class DatasetConverter:
                 
 
 
-    def create_labelmap_txt(path):
+    def create_labelmap_txt(self, path):
         f=open(path,'w')
         for category in self.categories:
             if category['enabled']:
@@ -116,7 +117,7 @@ class DatasetConverter:
 
 
 
-    def load_openImages(path, dataset_name = None):
+    def load_openImages(self, path, dataset_name = None):
         
         categories_folders = os.listdir(path)
         for category_folder in categories_folders:
@@ -152,7 +153,7 @@ class DatasetConverter:
        
     
     
-def load_pascalVOC(labels_path, images_path, dataset_name = None):
+def load_pascalVOC(self, labels_path, images_path, dataset_name = None):
     for xml_file in glob.glob(labels_path + '/*.xml'):
         tree = ET.parse(xml_file)
         root = tree.getroot()
@@ -186,7 +187,7 @@ def load_pascalVOC(labels_path, images_path, dataset_name = None):
 
 
 
-    def create_group(path, name, images):
+    def create_group(self, path, name, images):
         directory_path = os.path.join(path, name)
         if not os.path.exists(directory_path):
             os.makedirs(directory_path)
@@ -236,7 +237,7 @@ def load_pascalVOC(labels_path, images_path, dataset_name = None):
 
         
 
-    def store_dataset(path_to_store, train_ratio =.8, validation_ratio=.10, test_ratio=.10):
+    def store_dataset(self, path_to_store, train_ratio =.8, validation_ratio=.10, test_ratio=.10):
         random.shuffle(image_index)
 
         train_size = int(train_ratio * len(image_index))
