@@ -247,7 +247,7 @@ class DatasetConverter:
         x_val = self.image_index[len(x_train):len(x_train)+val_size]
         x_test = self.image_index[len(x_train) + len(x_val):]
 
-        
+
         self.create_group(path_to_store, 'train', x_train)
         self.create_group(path_to_store, 'validation', x_val)
         self.create_group(path_to_store, 'test', x_test)
