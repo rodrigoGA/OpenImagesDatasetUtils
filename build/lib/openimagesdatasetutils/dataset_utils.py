@@ -150,9 +150,8 @@ class DatasetConverter:
                     element  = self.get_image( image_path, xmins, xmaxs, ymins, ymaxs, cats, dataset_name)
                     self.image_index.append(element)
 
-       
-        
-        
+
+
     def load_pascalVOC(self, labels_path, images_path, dataset_name = None):
         for xml_file in glob.glob(labels_path + '/*.xml'):
             tree = ET.parse(xml_file)
