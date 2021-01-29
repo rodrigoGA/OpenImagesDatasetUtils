@@ -1,3 +1,26 @@
+import shutil
+
+import tensorflow as tf
+
+import os
+from os import listdir
+from os.path import isfile, join
+from os import walk
+from shutil import copyfile
+import random
+import numpy as np
+import io
+from object_detection.utils import dataset_util
+from object_detection.protos.string_int_label_map_pb2 import StringIntLabelMap, StringIntLabelMapItem
+from google.protobuf import text_format
+import uuid
+import glob
+from PIL import Image, ImageDraw, ImageFont
+import xml.etree.ElementTree as ET
+import pandas as pd
+
+
+
 def create_category_index(categories):
     num_categories = 0
     #se crea un indice de categorias con id y nombre
@@ -44,7 +67,7 @@ def get_image(
     
 
     
-def store_dataset_stadistics(images, path):
+def get_dataset_stadistics(images, datasettype, categories):
     df = pd.DataFrame(data = {'image': [image['uuid'] for image in images]})
     for categoy in categories:
         df[categoy['name']] = [0 for x in images]
@@ -57,11 +80,11 @@ def store_dataset_stadistics(images, path):
         for col in df.columns: 
             df.at[image['uuid'],col] = df.at[image['uuid'],col] + image['classes_text'].count(col.encode('utf8'))
 
-    df['dataset'] = [ image['dataset'] for image in images]
+    df['datasetorigin'] = [ image['dataset'] for image in images]
+    df['datasettype'] = [ datasettype for image in images]
+    return df
     
-    df.to_csv(path, index = True)
-    print(f'estadisticas de dataset guardadas en {path}')
-
+    
 
 
 
@@ -77,7 +100,9 @@ def store_dataset_stadistics(images, path):
 
 
 # labelmap_path = "./annotations/label_map.pbtxt"
-def create_labelmap(labelmap_path):
+def create_labes(label_basepath, categories):
+    path_pbtxt= os.path.join(label_basepath,  'label_map.pbtxt')
+
     msg = StringIntLabelMap()
     for category in categories:
         if category['enabled']:
@@ -85,11 +110,11 @@ def create_labelmap(labelmap_path):
 
     txt = str(text_format.MessageToBytes(msg, as_utf8=True), 'utf-8')
     print(txt)
-    with open(labelmap_path, 'w') as f:
+    with open(path_pbtxt, 'w') as f:
             f.write(txt)
             
-def create_labeltxt(path):
-    f=open(path,'w')
+    path_txt= os.path.join(label_basepath,  'label_map.txt')
+    f=open(path_txt,'w')
     for category in categories:
         if category['enabled']:
             f.write(category['name'] +'\n')
@@ -231,7 +256,7 @@ def create_group(path, name, images):
 
         
 
-def store_dataset(path_to_store, image_index, shuffle = True, train_ratio =.7, validation_ratio=.10, test_ratio=.10):
+def store_dataset(path_to_store, image_index, categories, shuffle = True, train_ratio =.8, validation_ratio=.10, test_ratio=.10):
     random.shuffle(image_index)
 
     train_size = int(train_ratio * len(image_index))
@@ -246,5 +271,10 @@ def store_dataset(path_to_store, image_index, shuffle = True, train_ratio =.7, v
     create_group(path_to_store, 'train', x_train)
     create_group(path_to_store, 'validation', x_val)
     create_group(path_to_store, 'test', x_test)
-            
+
+    df1 = get_dataset_stadistics(x_train, 'train', categories)
+    df2 = get_dataset_stadistics(x_val, 'validation', categories)
+    df3 = get_dataset_stadistics(x_test, 'test', categories)
+
+    return pd.concat([df1, df2, df3])
    
