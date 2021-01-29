@@ -237,15 +237,15 @@ class DatasetConverter:
         
 
     def store_dataset(self, path_to_store, train_ratio =.8, validation_ratio=.10, test_ratio=.10):
-        random.shuffle(image_index)
+        random.shuffle(self.image_index)
 
-        train_size = int(train_ratio * len(image_index))
-        val_size = int(validation_ratio * len(image_index))
-        test_size = int(test_ratio * len(image_index))
+        train_size = int(train_ratio * len(self.image_index))
+        val_size = int(validation_ratio * len(self.image_index))
+        test_size = int(test_ratio * len(self.image_index))
 
-        x_train = image_index[:train_size]
-        x_val = image_index[len(x_train):len(x_train)+val_size]
-        x_test = image_index[len(x_train) + len(x_val):]
+        x_train = self.image_index[:train_size]
+        x_val = self.image_index[len(x_train):len(x_train)+val_size]
+        x_test = self.image_index[len(x_train) + len(x_val):]
 
         
         create_group(path_to_store, 'train', x_train)
